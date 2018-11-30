@@ -22,7 +22,7 @@ type Op struct {
 // with TF.
 func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	op := new(Op)
-	if err := common.InitOperator(op, modelPB, options); err != nil {
+	if err := common.InitUsingB64Graph(op, modelPB, options); err != nil {
 		return nil, err
 	}
 	return op, nil
@@ -32,7 +32,7 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 // and step through training process.
 func New(numFeatures, numClasses int, learningRate float64, name, logdir string, options *tf.SessionOptions) (*Op, error) {
 	op := new(Op)
-	if err := common.InitOperator(op, modelPB, options); err != nil {
+	if err := common.InitUsingB64Graph(op, modelPB, options); err != nil {
 		return nil, err
 	}
 

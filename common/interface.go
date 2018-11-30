@@ -4,6 +4,8 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
+	"io/ioutil"
 
 	"github.com/tensorflow/tensorflow/tensorflow/go"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
@@ -49,15 +51,40 @@ type Operator interface {
 	SetSession(*tensorflow.Session)
 }
 
-// InitOperator initializes an operator with a graph and a session.
-func InitOperator(op Operator, b64SerializedGraph string, options *tf.SessionOptions) error {
-	def, err := base64.StdEncoding.DecodeString(b64SerializedGraph)
+// InitUsingB64Graph initializes an operator with a graph and a session.
+func InitUsingB64Graph(op Operator, b64SerializedGraph string, options *tf.SessionOptions) error {
+	graphDef, err := base64.StdEncoding.DecodeString(b64SerializedGraph)
 	if err != nil {
 		return err
 	}
 
+	return InitOperator(op, graphDef, options)
+}
+
+// InitUsingGraphReader reads graph using an io reader and initializes the operator.
+func InitUsingGraphReader(op Operator, graphReader io.Reader, options *tf.SessionOptions) error {
+	graphDef, err := ioutil.ReadAll(graphReader)
+	if err != nil {
+		return err
+	}
+
+	return InitOperator(op, graphDef, options)
+}
+
+// InitUsingGraphFile reads graph from a file and initializes the operator.
+func InitUsingGraphFile(op Operator, graphFile string, options *tf.SessionOptions) error {
+	graphDef, err := ioutil.ReadFile(graphFile)
+	if err != nil {
+		return err
+	}
+
+	return InitOperator(op, graphDef, options)
+}
+
+// InitOperator is initializes operator using graphDef passes as a byte buffer.
+func InitOperator(op Operator, graphDef []byte, options *tf.SessionOptions) error {
 	graph := tf.NewGraph()
-	if err := graph.Import(def, ""); err != nil {
+	if err := graph.Import(graphDef, ""); err != nil {
 		return err
 	}
 
@@ -72,6 +99,7 @@ func InitOperator(op Operator, b64SerializedGraph string, options *tf.SessionOpt
 	return nil
 }
 
+// Version prints version info of the graph def and the tensorflow library being used.
 func (op *Op) Version() (string, error) {
 	ver, err := op.GetSession().Run(
 		nil,
@@ -101,6 +129,7 @@ func (op *Op) Version() (string, error) {
 	return string(jb), err
 }
 
+// Close closes the tensorflow session.
 func (op *Op) Close() error {
 	return op.GetSession().Close()
 }

@@ -20,7 +20,7 @@ type Op struct {
 // for jpg images.
 func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	op := new(Op)
-	if err := common.InitOperator(op, modelPB, options); err != nil {
+	if err := common.InitUsingB64Graph(op, modelPB, options); err != nil {
 		return nil, err
 	}
 	return op, nil

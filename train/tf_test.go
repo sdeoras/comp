@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/sdeoras/go-scicomp/image"
-	"gopkg.in/cheggaaa/pb.v1"
 )
 
 func TestOp_Step(t *testing.T) {
@@ -39,7 +38,6 @@ func TestOp_Step(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	bar := newBar(numIterations)
 	for k := 0; k < numIterations; k++ {
 		for i := range trainingImages {
 			img := image.NewBlack(height, width)
@@ -88,11 +86,7 @@ func TestOp_Step(t *testing.T) {
 			}); err != nil {
 			t.Fatal(err)
 		}
-
-		bar.Increment()
 	}
-
-	bar.FinishPrint("Done!")
 
 	// now save checkpoint
 	cp, err := op.Save()
@@ -137,30 +131,6 @@ func TestOp_Step(t *testing.T) {
 	}
 }
 
-func newBar(numIterations int) *pb.ProgressBar {
-	// create a progress bar
-	bar := pb.StartNew(numIterations)
-	// refresh info every second (default 200ms)
-	bar.SetRefreshRate(time.Second)
-
-	// show percents (by default already true)
-	bar.ShowPercent = true
-
-	// show bar (by default already true)
-	bar.ShowBar = true
-
-	// no counters
-	bar.ShowCounters = false
-
-	// show "time left"
-	bar.ShowTimeLeft = true
-
-	// show average speed
-	bar.ShowSpeed = false
-
-	return bar
-}
-
 func TestOp_FizzBuzz(t *testing.T) {
 	numIterations := 10000
 	miniBatchSize := 1000
@@ -185,7 +155,6 @@ func TestOp_FizzBuzz(t *testing.T) {
 	trainingLabels := make([][]float32, miniBatchSize)
 	validationLabels := make([][]float32, miniBatchSize)
 
-	bar := newBar(numIterations)
 	for k := 0; k < numIterations; k++ {
 		for i := range trainingData {
 			n := rand.Int()
@@ -258,11 +227,7 @@ func TestOp_FizzBuzz(t *testing.T) {
 			}); err != nil {
 			t.Fatal(err)
 		}
-
-		bar.Increment()
 	}
-
-	bar.FinishPrint("Done!")
 
 	// now save checkpoint
 	cp, err := op.Save()
