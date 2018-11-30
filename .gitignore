@@ -1,0 +1,9 @@
+.idea
+*.txt
+__pycache__
+lib
+images
+*/tfcp/tfcp
+*/model
+op/*/model/
+scratchpad
