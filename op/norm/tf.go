@@ -24,19 +24,19 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	return op, nil
 }
 
-func (m *Op) Softmax(input []float64) ([]float64, error) {
+func (op *Op) Softmax(input []float64) ([]float64, error) {
 	inputT, err := tf.NewTensor(input)
 	if err != nil {
 		return nil, err
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(f64).Output(0)] = inputT
+	feeds[op.GetGraph().Operation(f64).Output(0)] = inputT
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(softmaxOp).Output(0),
+			op.GetGraph().Operation(softmaxOp).Output(0),
 		},
 		nil,
 	)

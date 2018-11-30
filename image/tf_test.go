@@ -11,6 +11,7 @@ func TestOperator_Read(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	_, err = op.Read("rand.jpg")
 	if err != nil {
@@ -23,6 +24,7 @@ func TestOperator_Decode(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	f, err := os.Open("rand.jpg")
 	if err != nil {
@@ -40,6 +42,7 @@ func TestOperator_RGB2GrayScale(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	image, err := op.Read("rand.jpg")
 	if err != nil {
@@ -57,6 +60,7 @@ func TestOperator_EncodeJpg(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	image := NewConst(16, 16, 255, 0, 0)
 
@@ -79,6 +83,7 @@ func TestOperator_ReadError(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	_, err = op.Read("non/existent/file.jpg")
 	if err == nil {
@@ -91,6 +96,7 @@ func TestOperator_Version(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	v, err := op.Version()
 	if err != nil {
@@ -105,6 +111,7 @@ func TestOp_Sobel(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	width := 1920
 	height := 1080
@@ -125,6 +132,7 @@ func TestOp_Resize(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	width := 1920
 	height := 1080
@@ -149,6 +157,7 @@ func TestOp_Stats(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	width := 1920
 	height := 1080
@@ -169,6 +178,7 @@ func TestOp_Batch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	images := make([]Image, 3)
 

@@ -24,26 +24,27 @@ func main() {
 		log.Fatalf("usage: %s inPath outPath", os.Args[0])
 	}
 
-	manager, err := cloud.NewOperator(nil)
+	op, err := cloud.NewOperator(nil)
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer op.Close()
 
-	version, err := manager.Version()
+	version, err := op.Version()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println("working with version:", version)
 
-	files, err := manager.Enumerate(os.Args[1])
+	files, err := op.Enumerate(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, file := range files {
 		t := time.Now()
-		b, err := manager.Read(file)
+		b, err := op.Read(file)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -68,7 +69,7 @@ func main() {
 		file = strings.Replace(file, ":/", "://", -1)
 
 		t = time.Now()
-		if err := manager.Write(file, b); err != nil {
+		if err := op.Write(file, b); err != nil {
 			log.Fatal(err)
 		}
 
