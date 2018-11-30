@@ -25,19 +25,19 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	return op, nil
 }
 
-func (m *Op) reduce(input []float64, operator string) (float64, error) {
+func (op *Op) reduce(input []float64, operator string) (float64, error) {
 	inputT, err := tf.NewTensor(input)
 	if err != nil {
 		return 0, err
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(f64).Output(0)] = inputT
+	feeds[op.GetGraph().Operation(f64).Output(0)] = inputT
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(operator).Output(0),
+			op.GetGraph().Operation(operator).Output(0),
 		},
 		nil,
 	)
@@ -58,39 +58,39 @@ func (m *Op) reduce(input []float64, operator string) (float64, error) {
 	return output, nil
 }
 
-func (m *Op) Mean(input []float64) (float64, error) {
-	return m.reduce(input, meanOp)
+func (op *Op) Mean(input []float64) (float64, error) {
+	return op.reduce(input, meanOp)
 }
 
-func (m *Op) Max(input []float64) (float64, error) {
-	return m.reduce(input, maxOp)
+func (op *Op) Max(input []float64) (float64, error) {
+	return op.reduce(input, maxOp)
 }
 
-func (m *Op) Min(input []float64) (float64, error) {
-	return m.reduce(input, minOp)
+func (op *Op) Min(input []float64) (float64, error) {
+	return op.reduce(input, minOp)
 }
 
-func (m *Op) Prod(input []float64) (float64, error) {
-	return m.reduce(input, prodOp)
+func (op *Op) Prod(input []float64) (float64, error) {
+	return op.reduce(input, prodOp)
 }
 
-func (m *Op) Sum(input []float64) (float64, error) {
-	return m.reduce(input, sumOp)
+func (op *Op) Sum(input []float64) (float64, error) {
+	return op.reduce(input, sumOp)
 }
 
-func (m *Op) Std(input []float64) (float64, error) {
+func (op *Op) Std(input []float64) (float64, error) {
 	inputT, err := tf.NewTensor(input)
 	if err != nil {
 		return 0, err
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(f64).Output(0)] = inputT
+	feeds[op.GetGraph().Operation(f64).Output(0)] = inputT
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(varOp).Output(0),
+			op.GetGraph().Operation(varOp).Output(0),
 		},
 		nil,
 	)

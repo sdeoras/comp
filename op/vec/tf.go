@@ -24,7 +24,7 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	return op, nil
 }
 
-func (m *Op) Linspace(start, stop float64, num int) ([]float64, error) {
+func (op *Op) Linspace(start, stop float64, num int) ([]float64, error) {
 	startTensor, err := tf.NewTensor(start)
 	if err != nil {
 		return nil, err
@@ -41,14 +41,14 @@ func (m *Op) Linspace(start, stop float64, num int) ([]float64, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(startT).Output(0)] = startTensor
-	feeds[m.GetGraph().Operation(stopT).Output(0)] = stopTensor
-	feeds[m.GetGraph().Operation(numT).Output(0)] = numTensor
+	feeds[op.GetGraph().Operation(startT).Output(0)] = startTensor
+	feeds[op.GetGraph().Operation(stopT).Output(0)] = stopTensor
+	feeds[op.GetGraph().Operation(numT).Output(0)] = numTensor
 
-	outTensor, err := m.GetSession().Run(
+	outTensor, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(linspaceOp).Output(0),
+			op.GetGraph().Operation(linspaceOp).Output(0),
 		},
 		nil,
 	)
@@ -68,19 +68,19 @@ func (m *Op) Linspace(start, stop float64, num int) ([]float64, error) {
 	return l, nil
 }
 
-func (m *Op) CumSum(input []float64) ([]float64, error) {
+func (op *Op) CumSum(input []float64) ([]float64, error) {
 	myInput, err := tf.NewTensor(input)
 	if err != nil {
 		return nil, err
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(f64).Output(0)] = myInput
+	feeds[op.GetGraph().Operation(f64).Output(0)] = myInput
 
-	outTensor, err := m.GetSession().Run(
+	outTensor, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(cumsumOp).Output(0),
+			op.GetGraph().Operation(cumsumOp).Output(0),
 		},
 		nil,
 	)
@@ -100,19 +100,19 @@ func (m *Op) CumSum(input []float64) ([]float64, error) {
 	return l, nil
 }
 
-func (m *Op) CumProd(input []float64) ([]float64, error) {
+func (op *Op) CumProd(input []float64) ([]float64, error) {
 	myInput, err := tf.NewTensor(input)
 	if err != nil {
 		return nil, err
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(f64).Output(0)] = myInput
+	feeds[op.GetGraph().Operation(f64).Output(0)] = myInput
 
-	outTensor, err := m.GetSession().Run(
+	outTensor, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(cumprodOp).Output(0),
+			op.GetGraph().Operation(cumprodOp).Output(0),
 		},
 		nil,
 	)

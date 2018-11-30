@@ -13,6 +13,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer op.Close()
 
 	N := []int{100, 200, 500, 1000, 2000, 5000, 10000}
 	for _, n := range N {

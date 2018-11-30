@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-func (m *Op) Print(w io.Writer, mat *Mat) error {
-	return m.print(w, "", mat)
+func (op *Op) Print(w io.Writer, mat *Mat) error {
+	return op.print(w, "", mat)
 }
 
-func (m *Op) print(w io.Writer, tag string, mat *Mat) error {
+func (op *Op) print(w io.Writer, tag string, mat *Mat) error {
 	if len(mat.Size) == 2 {
 		k := 0
 		_, _ = fmt.Fprintf(w, "%s%s\n", tag, "{")
@@ -35,17 +35,17 @@ func (m *Op) print(w io.Writer, tag string, mat *Mat) error {
 				newSize[j] = int(mat.Size[j])
 			}
 
-			x, err := m.Slice(mat, begin, newSize...)
+			x, err := op.Slice(mat, begin, newSize...)
 			if err != nil {
 				return err
 			}
 
-			x, err = m.Reshape(x, newSize[1:]...)
+			x, err = op.Reshape(x, newSize[1:]...)
 			if err != nil {
 				return err
 			}
 
-			if err := m.print(os.Stdout, tag+"  ", x); err != nil {
+			if err := op.print(os.Stdout, tag+"  ", x); err != nil {
 				return err
 			}
 		}

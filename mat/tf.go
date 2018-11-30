@@ -25,7 +25,7 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 }
 
 // New creates a new matrix from a given slice.
-func (m *Op) New(buf []float64, size ...int) (*Mat, error) {
+func (op *Op) New(buf []float64, size ...int) (*Mat, error) {
 	mat := new(Mat)
 	mat.Buf = buf
 	mat.Size = make([]int64, len(size))
@@ -43,7 +43,7 @@ func (m *Op) New(buf []float64, size ...int) (*Mat, error) {
 }
 
 // Slice inverts a matrix assuming it is invertible.
-func (m *Op) Slice(mat *Mat, begin []int, size ...int) (*Mat, error) {
+func (op *Op) Slice(mat *Mat, begin []int, size ...int) (*Mat, error) {
 	bufT, err := tf.NewTensor(mat.Buf)
 	if err != nil {
 		return nil, err
@@ -73,16 +73,16 @@ func (m *Op) Slice(mat *Mat, begin []int, size ...int) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
-	feeds[m.GetGraph().Operation(inputShapeB).Output(0)] = beginT
-	feeds[m.GetGraph().Operation(inputShapeS).Output(0)] = size2T
+	feeds[op.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputShapeB).Output(0)] = beginT
+	feeds[op.GetGraph().Operation(inputShapeS).Output(0)] = size2T
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(sliceOp).Output(0),
-			m.GetGraph().Operation(sliceShapeOp).Output(0),
+			op.GetGraph().Operation(sliceOp).Output(0),
+			op.GetGraph().Operation(sliceShapeOp).Output(0),
 		},
 		nil,
 	)
@@ -113,7 +113,7 @@ func (m *Op) Slice(mat *Mat, begin []int, size ...int) (*Mat, error) {
 }
 
 // Reshape reshapes the input matrix with new size.
-func (m *Op) Reshape(mat *Mat, size ...int) (*Mat, error) {
+func (op *Op) Reshape(mat *Mat, size ...int) (*Mat, error) {
 	p := int64(1)
 	for _, v := range size {
 		p *= int64(v)
@@ -143,14 +143,14 @@ func (m *Op) Reshape(mat *Mat, size ...int) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
-	feeds[m.GetGraph().Operation(inputShape2).Output(0)] = size2T
+	feeds[op.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputShape2).Output(0)] = size2T
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(reshapeOp).Output(0),
+			op.GetGraph().Operation(reshapeOp).Output(0),
 		},
 		nil,
 	)
@@ -176,7 +176,7 @@ func (m *Op) Reshape(mat *Mat, size ...int) (*Mat, error) {
 }
 
 // Repmat repeats input matrix multiple times as specified in dim array
-func (m *Op) Repmat(mat *Mat, dim ...int) (*Mat, error) {
+func (op *Op) Repmat(mat *Mat, dim ...int) (*Mat, error) {
 	bufT, err := tf.NewTensor(mat.Buf)
 	if err != nil {
 		return nil, err
@@ -197,15 +197,15 @@ func (m *Op) Repmat(mat *Mat, dim ...int) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
-	feeds[m.GetGraph().Operation(inputShape2).Output(0)] = size2T
+	feeds[op.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputShape2).Output(0)] = size2T
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(tileOp).Output(0),
-			m.GetGraph().Operation(tileShapeOp).Output(0),
+			op.GetGraph().Operation(tileOp).Output(0),
+			op.GetGraph().Operation(tileShapeOp).Output(0),
 		},
 		nil,
 	)
@@ -236,7 +236,7 @@ func (m *Op) Repmat(mat *Mat, dim ...int) (*Mat, error) {
 }
 
 // Mul multiples two matrices.
-func (m *Op) Mul(x, y *Mat) (*Mat, error) {
+func (op *Op) Mul(x, y *Mat) (*Mat, error) {
 	bufT, err := tf.NewTensor(x.Buf)
 	if err != nil {
 		return nil, err
@@ -258,16 +258,16 @@ func (m *Op) Mul(x, y *Mat) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
-	feeds[m.GetGraph().Operation(inputBuffer2).Output(0)] = bufT2
-	feeds[m.GetGraph().Operation(inputShape2).Output(0)] = sizeT2
+	feeds[op.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputBuffer2).Output(0)] = bufT2
+	feeds[op.GetGraph().Operation(inputShape2).Output(0)] = sizeT2
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(mulOp).Output(0),
-			m.GetGraph().Operation(mulShapeOp).Output(0),
+			op.GetGraph().Operation(mulOp).Output(0),
+			op.GetGraph().Operation(mulShapeOp).Output(0),
 		},
 		nil,
 	)
@@ -298,7 +298,7 @@ func (m *Op) Mul(x, y *Mat) (*Mat, error) {
 }
 
 // Inv inverts a matrix assuming it is invertible.
-func (m *Op) Inv(mat *Mat) (*Mat, error) {
+func (op *Op) Inv(mat *Mat) (*Mat, error) {
 	bufT, err := tf.NewTensor(mat.Buf)
 	if err != nil {
 		return nil, err
@@ -310,13 +310,13 @@ func (m *Op) Inv(mat *Mat) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputBuffer1).Output(0)] = bufT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(invOp).Output(0),
+			op.GetGraph().Operation(invOp).Output(0),
 		},
 		nil,
 	)
@@ -342,26 +342,26 @@ func (m *Op) Inv(mat *Mat) (*Mat, error) {
 }
 
 // Zeros is a matrix with all zeros.
-func (m *Op) Zeros(size ...int) (*Mat, error) {
-	return m.matInit(zerosOp, size...)
+func (op *Op) Zeros(size ...int) (*Mat, error) {
+	return op.matInit(zerosOp, size...)
 }
 
 // Ones is a matrix with all ones.
-func (m *Op) Ones(size ...int) (*Mat, error) {
-	return m.matInit(onesOp, size...)
+func (op *Op) Ones(size ...int) (*Mat, error) {
+	return op.matInit(onesOp, size...)
 }
 
 // Rand is a matrix with random numbers that have uniform distribution.
-func (m *Op) Rand(size ...int) (*Mat, error) {
-	return m.matInit(randOp, size...)
+func (op *Op) Rand(size ...int) (*Mat, error) {
+	return op.matInit(randOp, size...)
 }
 
 // Randn is a matrix with random numbers that have normal distribution.
-func (m *Op) Randn(size ...int) (*Mat, error) {
-	return m.matInit(randnOp, size...)
+func (op *Op) Randn(size ...int) (*Mat, error) {
+	return op.matInit(randnOp, size...)
 }
 
-func (m *Op) matInit(op string, size ...int) (*Mat, error) {
+func (op *Op) matInit(opType string, size ...int) (*Mat, error) {
 	s := make([]int64, len(size))
 	for i, v := range size {
 		s[i] = int64(v)
@@ -373,12 +373,12 @@ func (m *Op) matInit(op string, size ...int) (*Mat, error) {
 	}
 
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[m.GetGraph().Operation(inputShape1).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputShape1).Output(0)] = sizeT
 
-	out, err := m.GetSession().Run(
+	out, err := op.GetSession().Run(
 		feeds,
 		[]tf.Output{
-			m.GetGraph().Operation(op).Output(0),
+			op.GetGraph().Operation(opType).Output(0),
 		},
 		nil,
 	)

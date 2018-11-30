@@ -10,6 +10,7 @@ func TestOperator_Unique(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, count, err := op.Unique([]float64{0, 1, 2, 3, 1, 2, 3, 2, 3, 3})
 	if err != nil {
@@ -38,6 +39,7 @@ func TestOperator_Version(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	v, err := op.Version()
 	if err != nil {

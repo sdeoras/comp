@@ -13,6 +13,7 @@ func TestOp_FlattenImage(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.FlattenImage(im)
 	if err != nil {
@@ -36,12 +37,13 @@ func TestOp_FlattenSlice(t *testing.T) {
 	im := image.NewRand(2, 3)
 	imSlice, _ := im.Slice(image.Red)
 
-	m, err := NewOperator(nil)
+	op, err := NewOperator(nil)
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
-	out, err := m.FlattenSlice(imSlice)
+	out, err := op.FlattenSlice(imSlice)
 	if err != nil {
 		t.Fatal(err)
 	}

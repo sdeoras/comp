@@ -25,6 +25,7 @@ func TestOp_Step(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	fmt.Println("run >>> tensorboard --logdir=/tmp/train")
 
@@ -173,6 +174,7 @@ func TestOp_FizzBuzz(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	fmt.Println("run >>> tensorboard --logdir=/tmp/train")
 

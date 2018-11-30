@@ -11,6 +11,7 @@ func TestOperator_Version(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	v, err := op.Version()
 	if err != nil {
@@ -25,6 +26,7 @@ func TestOperator_Min(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Min([]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 	if err != nil {
@@ -41,6 +43,7 @@ func TestOperator_Max(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Max([]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 	if err != nil {
@@ -57,6 +60,7 @@ func TestOperator_Mean(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Mean([]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 	if err != nil {
@@ -73,6 +77,7 @@ func TestOperator_Std(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Std([]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11})
 	if err != nil {
@@ -89,6 +94,7 @@ func TestOperator_Sum(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Sum([]float64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10})
 	if err != nil {
@@ -105,6 +111,7 @@ func TestOperator_Prod(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.Prod([]float64{1, 2, 3, 4, 5})
 	if err != nil {

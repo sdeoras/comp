@@ -9,6 +9,7 @@ func TestOperator_Linspace(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	l, err := op.Linspace(0, 10, 11)
 	if err != nil {
@@ -27,6 +28,7 @@ func TestOperator_CumSum(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.CumSum([]float64{1, 2, 3, 4, 5})
 	if err != nil {
@@ -47,6 +49,7 @@ func TestOperator_CumProd(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer op.Close()
 
 	out, err := op.CumProd([]float64{1, 2, 3, 4, 5})
 	if err != nil {
