@@ -73,6 +73,6 @@ graph = tf.Session().graph_def
 tf.io.write_graph(graph, "./model", "graph.pb", as_text=False)
 
 with tf.Session() as sess:
-	tf.summary.FileWriter(logdir="/tmp/tensorflow/train", graph=sess.graph)
+    tf.summary.FileWriter(logdir="/tmp/tensorflow/train", graph=sess.graph)
 
 print("run 'tensorboard --logdir=/tmp/tensorflow' to view the graph")
