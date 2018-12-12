@@ -292,6 +292,88 @@ func (op *Op) Resize(height, width int, images ...Image) ([]ImageRaw, error) {
 	return rawImages, nil
 }
 
+// ResizeNormalize resize and normalize input image using bilinear algorithm.
+func (op *Op) ResizeNormalize(height, width int, mean, std float32, images ...Image) ([]ImageRaw, error) {
+	if len(images) == 0 {
+		return nil, nil
+	}
+
+	h0, w0, _ := images[0].Size()
+
+	if height <= 0 && width <= 0 {
+		height = h0
+		width = w0
+	}
+
+	if height <= 0 && width > 0 {
+		height = h0 * width / w0
+	}
+
+	if height > 0 && width <= 0 {
+		width = w0 * height / h0
+	}
+
+	data := make([]Image, len(images))
+
+	for i := range data {
+		data[i] = images[i]
+	}
+
+	inputT, err := tf.NewTensor(data)
+	if err != nil {
+		return nil, err
+	}
+
+	sizeT, err := tf.NewTensor([]int32{int32(height), int32(width)})
+	if err != nil {
+		return nil, err
+	}
+
+	meanT, err := tf.NewTensor(mean)
+	if err != nil {
+		return nil, err
+	}
+	stdT, err := tf.NewTensor(std)
+	if err != nil {
+		return nil, err
+	}
+
+	feeds := make(map[tf.Output]*tf.Tensor)
+	feeds[op.GetGraph().Operation(inputImage).Output(0)] = inputT
+	feeds[op.GetGraph().Operation(inputSize).Output(0)] = sizeT
+	feeds[op.GetGraph().Operation(inputMean).Output(0)] = meanT
+	feeds[op.GetGraph().Operation(inputStd).Output(0)] = stdT
+
+	out, err := op.GetSession().Run(
+		feeds,
+		[]tf.Output{
+			op.GetGraph().Operation(resizeNormalizeOp).Output(0),
+		},
+		nil,
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(out) == 0 {
+		return nil, fmt.Errorf("invalid output length of zero")
+	}
+
+	output, ok := out[0].Value().([][][][]float32)
+	if !ok {
+		return nil, fmt.Errorf("invalid output, could not perform type assertion:%T", out[0].Value())
+	}
+
+	rawImages := make([]ImageRaw, len(images))
+
+	for i := range rawImages {
+		rawImages[i] = output[i]
+	}
+
+	return rawImages, nil
+}
+
 // GetStats gets image stats for normalization.
 func (op *Op) GetStats(images ...ImageRaw) ([]Stats, error) {
 	if len(images) == 0 {
