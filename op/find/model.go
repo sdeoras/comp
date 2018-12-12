@@ -7,6 +7,6 @@ const (
 	//      mo u -h
 	modelPB = "" +
 		"CjUKB3ZlcnNpb24SBUNvbnN0KhYKBXZhbHVlEg1CCwgHEgBCBTAuMS4wKgsKBWR0eXBlEgIwBwoyCgdt" +
-		"eUlucHV0EgtQbGFjZWhvbGRlcioLCgVkdHlwZRICMAIqDQoFc2hhcGUSBDoCGAEKOwoGdW5pcXVlEhBV" +
+		"eUlucHV0EgtQbGFjZWhvbGRlcioNCgVzaGFwZRIEOgIYASoLCgVkdHlwZRICMAIKOwoGdW5pcXVlEhBV" +
 		"bmlxdWVXaXRoQ291bnRzGgdteUlucHV0KgcKAVQSAjACKg0KB291dF9pZHgSAjADIgIIGw=="
 )

@@ -73,6 +73,10 @@ type Operator interface {
 	// height and width, when non positive, autoscale will decide the values.
 	Resize(height, width int, images ...Image) ([]ImageRaw, error)
 
+	// ResizeNormalize will resize and normalize images. It subtracts mean and then
+	// divides by std.
+	ResizeNormalize(height, width int, mean, std float32, images ...Image) ([]ImageRaw, error)
+
 	// Sobel returns raw sobel output from sobel filter.
 	Sobel(images ...ImageRaw) ([]SobelRaw, error)
 

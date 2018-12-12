@@ -7,7 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/tensorflow/tensorflow/tensorflow/go"
+	tensorflow "github.com/tensorflow/tensorflow/tensorflow/go"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 

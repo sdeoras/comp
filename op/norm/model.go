@@ -6,7 +6,7 @@ const (
 	//      go get github.com/sdeoras/tensorflow/cmd/mo
 	//      mo u -h
 	modelPB = "" +
-		"CjUKB3ZlcnNpb24SBUNvbnN0KhYKBXZhbHVlEg1CCwgHEgBCBTAuMS4wKgsKBWR0eXBlEgIwBwoyCgdt" +
-		"eUlucHV0EgtQbGFjZWhvbGRlcioLCgVkdHlwZRICMAIqDQoFc2hhcGUSBDoCGAEKJAoHc29mdG1heBIH" +
+		"CjUKB3ZlcnNpb24SBUNvbnN0KgsKBWR0eXBlEgIwByoWCgV2YWx1ZRINQgsIBxIAQgUwLjEuMAoyCgdt" +
+		"eUlucHV0EgtQbGFjZWhvbGRlcioNCgVzaGFwZRIEOgIYASoLCgVkdHlwZRICMAIKJAoHc29mdG1heBIH" +
 		"U29mdG1heBoHbXlJbnB1dCoHCgFUEgIwAiICCBs="
 )

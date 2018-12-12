@@ -144,7 +144,32 @@ func TestOp_Resize(t *testing.T) {
 
 	//op.Write(im, "original.jpg")
 
-	_, err = op.Resize(128, 0, im)
+	_, err = op.Resize(299, 299, im)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	//op.Write(images[0].ToImageUnscaled(), "resized.jpg")
+}
+
+func TestOp_ResizeNormalize(t *testing.T) {
+	op, err := NewOperator(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer op.Close()
+
+	width := 1920
+	height := 1080
+	im := NewRand(height, width).AdaptiveToneShift(175, false)
+
+	for i := 0; i < 50; i++ {
+		im.RandCircle()
+	}
+
+	//op.Write(im, "original.jpg")
+
+	_, err = op.ResizeNormalize(299, 299, 0, 255, im)
 	if err != nil {
 		t.Fatal(err)
 	}
