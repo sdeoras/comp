@@ -11,3 +11,6 @@ TensorFlow jobs.
 Below is a simple matrix inversion benchmark
 ![GPU Acceleration](/art/matrix-inversion-cpu-vs-gpu.png)
 
+## Running on Raspberry Pi
+Checkout tag `r1.0.0` of this repo to run on raspberry pi devices.
+Also see the README in that tag for further instructions on setting up tensorflow for RPI
