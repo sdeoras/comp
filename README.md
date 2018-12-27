@@ -11,3 +11,10 @@ TensorFlow jobs.
 Below is a simple matrix inversion benchmark
 ![GPU Acceleration](/art/matrix-inversion-cpu-vs-gpu.png)
 
+## RPI Build
+You will need to have a forked copy of tensorflow when running on RPI devices.
+```go
+git clone https://github.com/sdeoras/tensorflow.git
+cd tensorflow
+git checkout r1.0.0
+```
