@@ -2,7 +2,6 @@ module github.com/sdeoras/go-scicomp
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/golang/protobuf v1.2.0 // indirect
 	github.com/helinwang/tfsum v0.0.0-20170424205007-0203575258a5
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
@@ -11,6 +10,6 @@ require (
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2 // indirect
 	github.com/tensorflow/tensorflow v1.12.0
-	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
-	golang.org/x/tools v0.0.0-20181207222222-4c874b978acb // indirect
 )
+
+replace github.com/tensorflow/tensorflow => ../tensorflow
