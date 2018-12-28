@@ -3,9 +3,8 @@ package layers
 import (
 	"fmt"
 
-	"github.com/sdeoras/go-scicomp/common"
-
-	"github.com/sdeoras/go-scicomp/image"
+	"github.com/sdeoras/comp/common"
+	"github.com/sdeoras/comp/image"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 

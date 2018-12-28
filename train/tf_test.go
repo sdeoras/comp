@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sdeoras/go-scicomp/image"
+	"github.com/sdeoras/comp/image"
 )
 
 func TestOp_Step(t *testing.T) {

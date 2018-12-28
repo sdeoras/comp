@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sdeoras/go-scicomp/cloud"
+	"github.com/sdeoras/comp/cloud"
 )
 
 type opInfo struct {

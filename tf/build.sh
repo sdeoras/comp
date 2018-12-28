@@ -7,24 +7,24 @@ cd ${GOPATH}/src/github.com/tensorflow/tensorflow/tensorflow/core/protobuf
 for d in `ls -1 *.proto`; do
     echo ${d}
     protoc -I . -I ../../../ -I ${GOPATH}/src/github.com/gogo/protobuf/protobuf \
-        --go_out=${GOPATH}/src/github.com/sdeoras/go-scicomp/tensorflow ${d}
+        --go_out=${GOPATH}/src/github.com/sdeoras/comp/tensorflow ${d}
 done
 
 cd ${GOPATH}/src/github.com/tensorflow/tensorflow/tensorflow/core/framework
 for d in `ls -1 *.proto`; do
     echo ${d}
     protoc -I . -I ../../../ -I ${GOPATH}/src/github.com/gogo/protobuf/protobuf \
-        --go_out=${GOPATH}/src/github.com/sdeoras/go-scicomp/tensorflow ${d}
+        --go_out=${GOPATH}/src/github.com/sdeoras/comp/tensorflow ${d}
 done
 
 cd ${GOPATH}/src/github.com/tensorflow/tensorflow/tensorflow/core/lib/core
 for d in `ls -1 *.proto`; do
     echo ${d}
     protoc -I . -I ../../../../ -I ${GOPATH}/src/github.com/gogo/protobuf/protobuf \
-        --go_out=${GOPATH}/src/github.com/sdeoras/go-scicomp/tensorflow ${d}
+        --go_out=${GOPATH}/src/github.com/sdeoras/comp/tensorflow ${d}
 done
 
-cd ${GOPATH}/src/github.com/sdeoras/go-scicomp/tensorflow
+cd ${GOPATH}/src/github.com/sdeoras/comp/tensorflow
 mkdir -p ../vendor
 rm -rf ../vendor/*
 mkdir -p ./eager

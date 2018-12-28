@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/sdeoras/go-scicomp/mat"
+	"github.com/sdeoras/comp/mat"
 )
 
 func main() {
