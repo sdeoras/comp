@@ -1,5 +1,7 @@
-# go-scicomp
-go-scicomp is a Go wrapper on TensorFlow intended to produce Go binaries with scientific
+# comp
+
+## about
+comp is a Go wrapper on TensorFlow intended to produce Go binaries with scientific
 computation capabilities. It is also nice to just drop the binary on a target machine with
 GPU and seamlessly take advantage of hardware acceleration.
 

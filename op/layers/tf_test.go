@@ -3,7 +3,7 @@ package layers
 import (
 	"testing"
 
-	"github.com/sdeoras/go-scicomp/image"
+	"github.com/sdeoras/comp/image"
 )
 
 func TestOp_FlattenImage(t *testing.T) {

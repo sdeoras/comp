@@ -1,6 +1,6 @@
 package layers
 
-import "github.com/sdeoras/go-scicomp/image"
+import "github.com/sdeoras/comp/image"
 
 type Operator interface {
 	FlattenImage(image image.Image) ([]byte, error)

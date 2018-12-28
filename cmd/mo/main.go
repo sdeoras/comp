@@ -14,7 +14,7 @@
 
 package main
 
-import "github.com/sdeoras/go-scicomp/cmd/mo/cmd"
+import "github.com/sdeoras/comp/cmd/mo/cmd"
 
 func main() {
 	cmd.Execute()
