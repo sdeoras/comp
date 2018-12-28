@@ -5,7 +5,7 @@ import (
 	"math/rand"
 
 	"github.com/helinwang/tfsum"
-	"github.com/sdeoras/go-scicomp/common"
+	"github.com/sdeoras/comp/common"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 

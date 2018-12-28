@@ -3,8 +3,7 @@ package find
 import (
 	"fmt"
 
-	"github.com/sdeoras/go-scicomp/common"
-
+	"github.com/sdeoras/comp/common"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 

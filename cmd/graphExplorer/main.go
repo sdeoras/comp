@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sdeoras/go-scicomp/common"
+	"github.com/sdeoras/comp/common"
 )
 
 type OpInfo struct {

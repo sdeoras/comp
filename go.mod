@@ -1,4 +1,4 @@
-module github.com/sdeoras/go-scicomp
+module github.com/sdeoras/comp
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
@@ -10,6 +10,7 @@ require (
 	github.com/spf13/viper v1.2.1
 	github.com/stretchr/testify v1.2.2 // indirect
 	github.com/tensorflow/tensorflow v1.12.0
+	golang.org/x/sync v0.0.0-20181108010431-42b317875d0f // indirect
 )
 
 replace github.com/tensorflow/tensorflow => ../tensorflow
