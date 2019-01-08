@@ -1,6 +1,7 @@
 package vec
 
 import (
+	"math"
 	"testing"
 )
 
@@ -62,5 +63,32 @@ func TestOperator_CumProd(t *testing.T) {
 
 	if out[4] != 120 {
 		t.Fatal("expected last number to be 120, got", out[4])
+	}
+}
+
+func TestOperator_FFT(t *testing.T) {
+	op, err := NewOperator(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer op.Close()
+
+	theta, err := op.Linspace(0, 1024*math.Pi, 4096)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	signal := make([]float64, len(theta))
+	for i := range theta {
+		signal[i] = math.Sin(theta[i])
+	}
+
+	out, err := op.FFT(signal)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(out) != len(signal) {
+		t.Fatal("expected length to be 5, got:", len(out))
 	}
 }

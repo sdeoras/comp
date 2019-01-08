@@ -15,7 +15,9 @@ tf.linspace(start=start, stop=stop, num=num, name="linspace")
 my_input = tf.placeholder(tf.float64, name="myInput")
 tf.math.cumsum(my_input, name="cumsum")
 tf.math.cumprod(my_input, name="cumprod")
-tf.reverse
+
+my_fft_input = tf.placeholder(tf.complex128, name="myFFTInput")
+tf.spectral.fft(my_fft_input, name="fft")
 
 # finally save the graph to be used in Go code
 graph = tf.Session().graph_def
