@@ -2,6 +2,7 @@ package vec
 
 import (
 	"math"
+	"math/rand"
 	"testing"
 )
 
@@ -73,14 +74,15 @@ func TestOperator_FFT(t *testing.T) {
 	}
 	defer op.Close()
 
-	theta, err := op.Linspace(0, 1024*math.Pi, 4096)
+	n := 15 * 1024
+	theta, err := op.Linspace(0, 1024*math.Pi, n)
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	signal := make([]float64, len(theta))
 	for i := range theta {
-		signal[i] = math.Sin(theta[i])
+		signal[i] = math.Sin(theta[i]) + rand.Float64()
 	}
 
 	out, err := op.FFT(signal)
@@ -89,6 +91,28 @@ func TestOperator_FFT(t *testing.T) {
 	}
 
 	if len(out) != len(signal) {
-		t.Fatal("expected length to be 5, got:", len(out))
+		t.Fatal("expected length to be", n, ", got:", len(out))
 	}
+
+	// write data to file to manually check using Julia plots
+	/*var bb bytes.Buffer
+	bw := bufio.NewWriter(&bb)
+
+	if _, err := bw.WriteString("signal,fft\n"); err != nil {
+		t.Fatal(err)
+	}
+
+	for i := range out {
+		if _, err := bw.WriteString(fmt.Sprintf("%v,%v\n", signal[i], out[i])); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	if err := bw.Flush(); err != nil {
+		t.Fatal(err)
+	}
+
+	if err := ioutil.WriteFile("/tmp/data.dat", bb.Bytes(), 0755); err != nil {
+		t.Fatal(err)
+	}*/
 }
