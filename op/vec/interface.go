@@ -10,4 +10,7 @@ type Operator interface {
 
 	// CumProd obtains cumulative product of input
 	CumProd(input []float64) ([]float64, error)
+
+	// FFT obtains discrete fast fourier transform over input
+	FFT(input []float64) ([]float64, error)
 }

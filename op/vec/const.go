@@ -12,8 +12,10 @@ const (
 	linspaceOp = "linspace"
 
 	// inputs
-	f64 = "myInput"
+	f64      = "myInput"
+	fftInput = "myFFTInput"
 
 	cumsumOp  = "cumsum"
 	cumprodOp = "cumprod"
+	fftOp     = "fft"
 )

@@ -2,6 +2,7 @@ package vec
 
 import (
 	"fmt"
+	"math/cmplx"
 
 	"github.com/sdeoras/comp/common"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
@@ -129,4 +130,46 @@ func (op *Op) CumProd(input []float64) ([]float64, error) {
 	}
 
 	return l, nil
+}
+
+func (op *Op) FFT(input []float64) ([]float64, error) {
+	cinput := make([]complex128, len(input))
+	for i := range input {
+		cinput[i] = complex(input[i], 0)
+	}
+
+	myInput, err := tf.NewTensor(cinput)
+	if err != nil {
+		return nil, err
+	}
+
+	feeds := make(map[tf.Output]*tf.Tensor)
+	feeds[op.GetGraph().Operation(fftInput).Output(0)] = myInput
+
+	outTensor, err := op.GetSession().Run(
+		feeds,
+		[]tf.Output{
+			op.GetGraph().Operation(fftOp).Output(0),
+		},
+		nil,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(outTensor) == 0 {
+		return nil, fmt.Errorf("invalid output length of zero")
+	}
+
+	l, ok := outTensor[0].Value().([]complex128)
+	if !ok {
+		return nil, fmt.Errorf("type assertion error:%T", outTensor[0].Value())
+	}
+
+	out := make([]float64, len(l))
+	for i := range l {
+		out[i] = cmplx.Abs(l[i])
+	}
+
+	return out, nil
 }
