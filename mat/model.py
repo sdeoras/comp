@@ -18,6 +18,14 @@ inv = tf.reshape(buff_1, shape=shape_1)
 inv = tf.linalg.inv(inv)
 inv = tf.reshape(inv, shape=[-1], name="inv")
 
+# qr decomposition
+qr = tf.reshape(buff_1, shape=shape_1)
+q, r = tf.linalg.qr(qr, full_matrices=True)
+q = tf.reshape(q, shape=[-1])
+r = tf.reshape(r, shape=[-1])
+tf.identity(q, name="qrdecomp_q")
+tf.identity(r, name="qrdecomp_r")
+
 # create matrix
 mat_zeros = tf.zeros(shape=shape_1, dtype=tf.float64)
 tf.reshape(mat_zeros, shape=[-1], name="zeros")

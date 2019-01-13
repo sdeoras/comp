@@ -15,6 +15,8 @@ const (
 
 	// ops
 	invOp        = "inv"
+	qrOpQ        = "qrdecomp_q"
+	qrOpR        = "qrdecomp_r"
 	zerosOp      = "zeros"
 	onesOp       = "ones"
 	randOp       = "rand"

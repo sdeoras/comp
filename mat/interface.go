@@ -34,6 +34,8 @@ type Operator interface {
 	Mul(x, y *Mat) (*Mat, error)
 	// Inv takes inverse of a matrix.
 	Inv(mat *Mat) (*Mat, error)
+	// Qr takes QR decomposition of a matrix.
+	Qr(mat *Mat) (*Mat, *Mat, error)
 
 	// Print will pretty print input matrix.
 	Print(w io.Writer, mat *Mat) error
