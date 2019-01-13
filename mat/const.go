@@ -17,6 +17,7 @@ const (
 	invOp        = "inv"
 	qrOpQ        = "qrdecomp_q"
 	qrOpR        = "qrdecomp_r"
+	transposeOp  = "transposeOp"
 	zerosOp      = "zeros"
 	onesOp       = "ones"
 	randOp       = "rand"
