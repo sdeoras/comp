@@ -27,6 +27,8 @@ type Operator interface {
 	Reshape(mat *Mat, size ...int) (*Mat, error)
 	// Slice can extract a slice from a matrix.
 	Slice(mat *Mat, begin []int, size ...int) (*Mat, error)
+	// Transpose takes transpose of a matrix. Defined only for a 2D matrix.
+	Transpose(mat *Mat) (*Mat, error)
 	// Repmat repeats a matrix as many times along dimensions as requested.
 	Repmat(mat *Mat, dim ...int) (*Mat, error)
 

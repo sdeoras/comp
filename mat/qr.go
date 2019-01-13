@@ -6,7 +6,7 @@ import (
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
-// Inv inverts a matrix assuming it is invertible.
+// Qr takes QR decomposition of a matrix.
 func (op *Op) Qr(mat *Mat) (*Mat, *Mat, error) {
 	bufT, err := tf.NewTensor(mat.Buf)
 	if err != nil {

@@ -18,6 +18,11 @@ inv = tf.reshape(buff_1, shape=shape_1)
 inv = tf.linalg.inv(inv)
 inv = tf.reshape(inv, shape=[-1], name="inv")
 
+# transpose
+transpose = tf.reshape(buff_1, shape=shape_1)
+transpose = tf.linalg.transpose(transpose)
+transpose = tf.reshape(transpose, shape=[-1], name="transposeOp")
+
 # qr decomposition
 qr = tf.reshape(buff_1, shape=shape_1)
 q, r = tf.linalg.qr(qr, full_matrices=True)
