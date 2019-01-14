@@ -25,7 +25,7 @@ transpose = tf.reshape(transpose, shape=[-1], name="transposeOp")
 
 # qr decomposition
 qr = tf.reshape(buff_1, shape=shape_1)
-q, r = tf.linalg.qr(qr, full_matrices=True)
+q, r = tf.linalg.qr(qr, full_matrices=False)
 q = tf.reshape(q, shape=[-1])
 r = tf.reshape(r, shape=[-1])
 tf.identity(q, name="qrdecomp_q")
