@@ -46,7 +46,7 @@ func (op *Op) Qr(mat *Mat) (*Mat, *Mat, error) {
 
 	qMat := new(Mat)
 	qMat.Buf = outQ
-	qMat.Size = []int64{mat.Size[0], mat.Size[0]}
+	qMat.Size = mat.Size
 
 	outR, ok := out[1].Value().([]float64)
 	if !ok {
@@ -55,7 +55,7 @@ func (op *Op) Qr(mat *Mat) (*Mat, *Mat, error) {
 
 	rMat := new(Mat)
 	rMat.Buf = outR
-	rMat.Size = mat.Size
+	rMat.Size = []int64{mat.Size[1], mat.Size[1]}
 
 	return qMat, rMat, nil
 }
