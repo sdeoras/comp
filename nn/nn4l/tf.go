@@ -1,4 +1,4 @@
-package train
+package nn4l
 
 import (
 	"fmt"
@@ -30,41 +30,53 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 
 // New provides a new trainer operator that can be used to feed taining data
 // and step through training process.
-func New(numFeatures, numClasses int, learningRate float64, name, logdir string, options *tf.SessionOptions) (*Op, error) {
+func New(dim []int, learningRate float64, name, logdir string, options *tf.SessionOptions) (*Op, error) {
 	op := new(Op)
 	if err := common.InitUsingB64Graph(op, modelPB, options); err != nil {
 		return nil, err
+	}
+
+	if len(dim) != numLayers+1 {
+		return nil, fmt.Errorf("you must provide 5 values for dim")
 	}
 
 	op.learningRate = float32(learningRate)
 	op.logdir = logdir
 	op.name = name
 
-	weights := make([][]float32, numFeatures)
-	for i := range weights {
-		weights[i] = make([]float32, numClasses)
-		for j := range weights[i] {
-			weights[i][j] = rand.Float32()
-		}
-	}
-	weightsT, err := tf.NewTensor(weights)
-	if err != nil {
-		return nil, err
-	}
-
-	biases := make([]float32, numClasses)
-	for i := range biases {
-		biases[i] = rand.Float32()
-	}
-
-	biasesT, err := tf.NewTensor(biases)
-	if err != nil {
-		return nil, err
-	}
-
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[op.GetGraph().Operation(weightsInput).Output(0)] = weightsT
-	feeds[op.GetGraph().Operation(biasesInput).Output(0)] = biasesT
+
+	for k := 0; k < len(dim)-1; k++ {
+		weights := make([][]float32, dim[k])
+		for i := range weights {
+			weights[i] = make([]float32, dim[k+1])
+			for j := range weights[i] {
+				weights[i][j] = rand.Float32()
+			}
+		}
+
+		biases := make([]float32, dim[k+1])
+		for i := range biases {
+			biases[i] = rand.Float32()
+		}
+
+		weightsT, err := tf.NewTensor(weights)
+		if err != nil {
+			return nil, err
+		}
+
+		biasesT, err := tf.NewTensor(biases)
+		if err != nil {
+			return nil, err
+		}
+
+		feeds[op.GetGraph().Operation(
+			fmt.Sprintf("%s%s%d", weightsInput, "Layer", k+1),
+		).Output(0)] = weightsT
+		feeds[op.GetGraph().Operation(
+			fmt.Sprintf("%s%s%d", biasesInput, "Layer", k+1),
+		).Output(0)] = biasesT
+	}
 
 	if _, err := op.GetSession().Run(
 		feeds,
@@ -85,25 +97,32 @@ func (op *Op) Load(checkPoint *CheckPoint) error {
 		return fmt.Errorf("input is nil in checkpoint, cannot load")
 	}
 
-	if len(checkPoint.Weights[0]) != len(checkPoint.Biases) {
-		return fmt.Errorf("weights and biases lengths are not compatible")
-	}
-
-	weightsT, err := tf.NewTensor(checkPoint.Weights)
-	if err != nil {
-		return err
-	}
-
-	biasesT, err := tf.NewTensor(checkPoint.Biases)
-	if err != nil {
-		return err
-	}
-
 	feeds := make(map[tf.Output]*tf.Tensor)
-	feeds[op.GetGraph().Operation(weightsInput).Output(0)] = weightsT
-	feeds[op.GetGraph().Operation(biasesInput).Output(0)] = biasesT
 
-	_, err = op.GetSession().Run(
+	for k := 0; k < numLayers; k++ {
+		if len(checkPoint.Weights[k][0]) != len(checkPoint.Biases[k]) {
+			return fmt.Errorf("weights and biases lengths are not compatible for %d-th pair", k)
+		}
+
+		weightsT, err := tf.NewTensor(checkPoint.Weights[k])
+		if err != nil {
+			return err
+		}
+
+		biasesT, err := tf.NewTensor(checkPoint.Biases[k])
+		if err != nil {
+			return err
+		}
+
+		feeds[op.GetGraph().Operation(
+			fmt.Sprintf("%s%s%d", weightsInput, "Layer", k+1),
+		).Output(0)] = weightsT
+		feeds[op.GetGraph().Operation(
+			fmt.Sprintf("%s%s%d", biasesInput, "Layer", k+1),
+		).Output(0)] = biasesT
+	}
+
+	_, err := op.GetSession().Run(
 		feeds,
 		nil,
 		[]*tf.Operation{
@@ -119,8 +138,14 @@ func (op *Op) Save() (*CheckPoint, error) {
 	out, err := op.GetSession().Run(
 		nil,
 		[]tf.Output{
-			op.GetGraph().Operation(weightsOp).Output(0),
-			op.GetGraph().Operation(biasesOp).Output(0),
+			op.GetGraph().Operation(weightsOp + "Layer1").Output(0),
+			op.GetGraph().Operation(biasesOp + "Layer1").Output(0),
+			op.GetGraph().Operation(weightsOp + "Layer2").Output(0),
+			op.GetGraph().Operation(biasesOp + "Layer2").Output(0),
+			op.GetGraph().Operation(weightsOp + "Layer3").Output(0),
+			op.GetGraph().Operation(biasesOp + "Layer3").Output(0),
+			op.GetGraph().Operation(weightsOp + "Layer4").Output(0),
+			op.GetGraph().Operation(biasesOp + "Layer4").Output(0),
 		},
 		nil,
 	)
@@ -129,18 +154,49 @@ func (op *Op) Save() (*CheckPoint, error) {
 		return nil, err
 	}
 
-	if len(out) != 2 {
-		return nil, fmt.Errorf("invalid trainingAccuracy length of zero")
+	if len(out) != 8 {
+		return nil, fmt.Errorf("expected length == 8, got:%d", len(out))
 	}
 
-	weights, ok := out[0].Value().([][]float32)
+	weights := make([][][]float32, numLayers)
+	biases := make([][]float32, numLayers)
+	var ok bool
+
+	weights[0], ok = out[0].Value().([][]float32)
 	if !ok {
 		return nil, fmt.Errorf("could not get valid weights due to type assertion errors: %T", out[0].Value())
 	}
 
-	biases, ok := out[1].Value().([]float32)
+	biases[0], ok = out[1].Value().([]float32)
 	if !ok {
 		return nil, fmt.Errorf("could not get valid biases due to type assertion errors: %T", out[1].Value())
+	}
+
+	weights[1], ok = out[2].Value().([][]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid weights due to type assertion errors: %T", out[2].Value())
+	}
+	biases[1], ok = out[3].Value().([]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid biases due to type assertion errors: %T", out[3].Value())
+	}
+
+	weights[2], ok = out[4].Value().([][]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid weights due to type assertion errors: %T", out[4].Value())
+	}
+	biases[2], ok = out[5].Value().([]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid biases due to type assertion errors: %T", out[5].Value())
+	}
+
+	weights[3], ok = out[6].Value().([][]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid weights due to type assertion errors: %T", out[6].Value())
+	}
+	biases[3], ok = out[7].Value().([]float32)
+	if !ok {
+		return nil, fmt.Errorf("could not get valid biases due to type assertion errors: %T", out[7].Value())
 	}
 
 	return &CheckPoint{

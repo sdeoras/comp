@@ -6,7 +6,7 @@ install Go API for TensorFlow
 https://www.tensorflow.org/install/lang_go
 
 ```bash
-$ go get github.com/sdeoras/comp/...
+$ go get github.com/sdeoras/comp/nn/nnl1
 ```
 
 # details

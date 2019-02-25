@@ -1,10 +1,13 @@
-package train
+package nn4l
 
 //go:generate ./model.sh
 
 // these constants refer to keys from TF namespace and are defined in
 // model.py
 const (
+	// layer count
+	numLayers = 4
+
 	// inputs
 	weightsInput      = "weightsInit"
 	biasesInput       = "biasesInit"

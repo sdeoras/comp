@@ -1,4 +1,4 @@
-package train
+package nn4l
 
 // Data is a data to be fed to the trainer in the form of a 2D matrix
 // and associated labels.
@@ -26,8 +26,8 @@ type PredictionOutput struct {
 
 // CheckPoint is the model checkpoint in the form of weights and biases.
 type CheckPoint struct {
-	Weights [][]float32
-	Biases  []float32
+	Weights [][][]float32
+	Biases  [][]float32
 }
 
 // Operator defines methods to train, predict and checkpoint a model
