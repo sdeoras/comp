@@ -1,4 +1,4 @@
-package train
+package nn4l
 
 import (
 	"encoding/json"
@@ -20,7 +20,7 @@ func TestOp_Step(t *testing.T) {
 	numClasses := 2
 	learningRate := 0.0003
 
-	op, err := New(height*width, numClasses, learningRate, "image-classification", "/tmp/train", nil)
+	op, err := New([]int{height * width, 100, 50, 10, numClasses}, learningRate, "image-classification", "/tmp/train", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -140,7 +140,7 @@ func TestOp_FizzBuzz(t *testing.T) {
 	primes := []int{2, 3, 5, 7, 11, 13}
 	numFeatures := len(primes) + 1
 
-	op, err := New(numFeatures, numClasses, learningRate, "fizz-buzz", "/tmp/train", nil)
+	op, err := New([]int{numFeatures, 5, 4, 3, numClasses}, learningRate, "fizz-buzz", "/tmp/train", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
