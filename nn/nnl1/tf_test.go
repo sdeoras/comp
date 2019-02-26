@@ -1,4 +1,4 @@
-package nn1l
+package nnl1
 
 import (
 	"encoding/json"
@@ -6,6 +6,8 @@ import (
 	"math/rand"
 	"testing"
 	"time"
+
+	"github.com/sdeoras/comp/nn"
 
 	"github.com/sdeoras/comp/image"
 )
@@ -76,13 +78,13 @@ func TestOp_Step(t *testing.T) {
 		}
 
 		if _, err := op.Step(
-			Data{
-				Data:   trainingData,
-				Labels: trainingLabels,
+			&nn.Data{
+				X: trainingData,
+				Y: trainingLabels,
 			},
-			Data{
-				Data:   validationData,
-				Labels: validationLabels,
+			&nn.Data{
+				X: validationData,
+				Y: validationLabels,
 			}); err != nil {
 			t.Fatal(err)
 		}
@@ -115,7 +117,7 @@ func TestOp_Step(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	out, err := op.Predict(Data{Data: data, Labels: [][]float32{labels}})
+	out, err := op.Predict(&nn.Data{X: data, Y: [][]float32{labels}})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -217,13 +219,13 @@ func TestOp_FizzBuzz(t *testing.T) {
 		}
 
 		if _, err := op.Step(
-			Data{
-				Data:   trainingData,
-				Labels: trainingLabels,
+			&nn.Data{
+				X: trainingData,
+				Y: trainingLabels,
 			},
-			Data{
-				Data:   validationData,
-				Labels: validationLabels,
+			&nn.Data{
+				X: validationData,
+				Y: validationLabels,
 			}); err != nil {
 			t.Fatal(err)
 		}

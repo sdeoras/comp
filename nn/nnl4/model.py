@@ -9,7 +9,7 @@ tf.constant("0.1.0", name="version")
 learning_rate = tf.placeholder(dtype=tf.float32, shape=(), name="learningRate")
 
 # inputs and variables
-y_0 = tf.placeholder(tf.float32, shape=(None, None), name="x")
+x = tf.placeholder(tf.float32, shape=(None, None), name="x")
 labels = tf.placeholder(tf.float32, shape=[None, None], name="labels")
 
 # variables can be initialized using placeholder data.
@@ -38,6 +38,7 @@ b_layer_4 = tf.Variable(b_input_layer_4, validate_shape=False, name="biasesLayer
 init = tf.global_variables_initializer()
 
 # 4 layer model
+y_0 = x
 y_1 = tf.nn.relu(tf.matmul(y_0, w_layer_1) + b_layer_1)
 y_2 = tf.nn.relu(tf.matmul(y_1, w_layer_2) + b_layer_2)
 y_3 = tf.nn.relu(tf.matmul(y_2, w_layer_3) + b_layer_3)
