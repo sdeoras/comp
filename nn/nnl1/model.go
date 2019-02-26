@@ -1,4 +1,4 @@
-package nn1l
+package nnl1
 
 const (
 	// model is base64 representation of protocol buffer TF model.

@@ -1,4 +1,4 @@
-package nn4l
+package nnl4
 
 //go:generate ./model.sh
 
