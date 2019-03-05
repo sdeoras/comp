@@ -2,7 +2,7 @@ module github.com/sdeoras/comp
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
-	github.com/golang/protobuf v1.2.0 // indirect
+	github.com/golang/protobuf v1.2.0
 	github.com/helinwang/tfsum v0.0.0-20170424205007-0203575258a5
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
