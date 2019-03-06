@@ -34,7 +34,7 @@ func TestOp_Load(t *testing.T) {
 	}
 }
 
-func TestOp_Infer(t *testing.T) {
+func TestOp_Generate(t *testing.T) {
 	b, err := ioutil.ReadFile("model/cp.pb")
 	if err != nil {
 		t.Fatal(err)
@@ -56,7 +56,7 @@ func TestOp_Infer(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	if err := op.Infer(10); err != nil {
+	if _, err := op.Generate(10); err != nil {
 		t.Fatal(err)
 	}
 }

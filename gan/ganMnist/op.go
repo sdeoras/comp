@@ -140,7 +140,7 @@ func (op *Op) Load(checkpoint *proto.Checkpoint) error {
 	return err
 }
 
-func (op *Op) Infer(count int) error {
+func (op *Op) Generate(count int) ([][]byte, error) {
 	rand.Seed(time.Now().UnixNano())
 	data := make([][]float32, count)
 	for i := range data {
@@ -152,7 +152,7 @@ func (op *Op) Infer(count int) error {
 
 	dataT, err := tf.NewTensor(data)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	localFeeds := make(map[tf.Output]*tf.Tensor)
@@ -166,24 +166,25 @@ func (op *Op) Infer(count int) error {
 	)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	if len(out) != 1 {
-		return fmt.Errorf("expected len out to be 1, got:%d", len(out))
+		return nil, fmt.Errorf("expected len out to be 1, got:%d", len(out))
 	}
 
 	output, ok := out[0].Value().([][]float32)
 	if !ok {
-		return fmt.Errorf("expected output to be of type [][]float32, got:%T", out[0].Value())
+		return nil, fmt.Errorf("expected output to be of type [][]float32, got:%T", out[0].Value())
 	}
 
 	imOp, err := image.NewOperator(nil)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer imOp.Close()
 
+	outImages := make([][]byte, count)
 	for p := 0; p < count; p++ {
 		q := 0
 		im := make([][][]uint8, 28)
@@ -198,10 +199,17 @@ func (op *Op) Infer(count int) error {
 			}
 		}
 
+		b, err := imOp.Encode(image.Image(im))
+		if err != nil {
+			return nil, err
+		}
+
+		outImages[p] = b
+
 		if err := imOp.Write(image.Image(im), fmt.Sprintf("/tmp/gan_%d.jpg", p)); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return nil
+	return outImages, nil
 }
