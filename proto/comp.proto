@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package proto;
+
+// Checkpoint is a struct storing weights and biases
+message Checkpoint {
+    // weights stores different weights against a string label
+    map<string, Variable> weights = 1;
+    // biases stores different biases against a string label
+    map<string, Variable> biases = 2;
+}
+
+// Variable is basically a buffer and its size
+message Variable {
+    repeated float data = 1;
+    repeated int64 size = 2;
+}

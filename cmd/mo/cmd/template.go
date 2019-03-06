@@ -9,17 +9,14 @@ import (
 	"io/ioutil"
 	"strings"
 	"text/template"
+
+	"github.com/sirupsen/logrus"
 )
 
-func tmplExecute(w io.Writer, keys []string, tmplFile, modelFile string) error {
-	tmpl, err := template.ParseFiles(tmplFile)
+func readAsSplitB64(fileName string) (string, error) {
+	b, err := ioutil.ReadFile(fileName)
 	if err != nil {
-		return err
-	}
-
-	b, err := ioutil.ReadFile(modelFile)
-	if err != nil {
-		return err
+		return "", err
 	}
 
 	b64 := base64.StdEncoding.EncodeToString(b)
@@ -27,7 +24,7 @@ func tmplExecute(w io.Writer, keys []string, tmplFile, modelFile string) error {
 	bw := bufio.NewWriter(&bb)
 
 	if _, err := bw.WriteString("\"\""); err != nil {
-		return err
+		return "", err
 	}
 
 	step := 80
@@ -44,14 +41,35 @@ func tmplExecute(w io.Writer, keys []string, tmplFile, modelFile string) error {
 		}
 
 		if _, err := bw.WriteString(fmt.Sprintf("+\n\"%s\"", b64[start:stop])); err != nil {
-			return err
+			return "", err
 		}
 	}
 
-	bw.Flush()
+	_ = bw.Flush()
+
+	return bb.String(), nil
+}
+
+func tmplExecute(w io.Writer, keys []string, tmplFile, modelFile, checkpointFile string) error {
+	tmpl, err := template.ParseFiles(tmplFile)
+	if err != nil {
+		return err
+	}
 
 	data := make(map[string]string)
-	data["model"] = bb.String()
+	s, err := readAsSplitB64(modelFile)
+	if err != nil {
+		logrus.Error(err)
+	}
+	data["model"] = s
+
+	if len(checkpointFile) > 0 {
+		s, err := readAsSplitB64(checkpointFile)
+		if err != nil {
+			logrus.Error(err)
+		}
+		data["checkpoint"] = s
+	}
 
 	for _, key := range keys {
 		v := strings.Split(key, ":")

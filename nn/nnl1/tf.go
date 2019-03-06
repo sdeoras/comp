@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/sdeoras/comp/nn"
-
 	"github.com/helinwang/tfsum"
 	"github.com/sdeoras/comp/common"
+	"github.com/sdeoras/comp/nn"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 

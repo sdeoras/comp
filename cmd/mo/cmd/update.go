@@ -34,20 +34,22 @@ var updateCmd = &cobra.Command{
 }
 
 func ExecuteUpdateCmd(cmd *cobra.Command, args []string) error {
-	viper.BindPFlag("/update/template", cmd.Flags().Lookup("template"))
-	viper.BindPFlag("/update/model", cmd.Flags().Lookup("model"))
-	viper.BindPFlag("/update/out", cmd.Flags().Lookup("out"))
-	viper.BindPFlag("/update/key", cmd.Flags().Lookup("key"))
+	_ = viper.BindPFlag("/update/template", cmd.Flags().Lookup("template"))
+	_ = viper.BindPFlag("/update/model", cmd.Flags().Lookup("model"))
+	_ = viper.BindPFlag("/update/checkpoint", cmd.Flags().Lookup("checkpoint"))
+	_ = viper.BindPFlag("/update/out", cmd.Flags().Lookup("out"))
+	_ = viper.BindPFlag("/update/key", cmd.Flags().Lookup("key"))
 
 	template := viper.GetString("/update/template")
 	model := viper.GetString("/update/model")
+	checkpoint := viper.GetString("/update/checkpoint")
 	out := viper.GetString("/update/out")
 	keys := viper.GetStringSlice("/update/key")
 
 	var bb bytes.Buffer
 	bw := bufio.NewWriter(&bb)
 
-	if err := tmplExecute(bw, keys, template, model); err != nil {
+	if err := tmplExecute(bw, keys, template, model, checkpoint); err != nil {
 		return err
 	}
 
@@ -72,6 +74,7 @@ func init() {
 
 	updateCmd.Flags().StringP("template", "t", "./model.tmpl", "template file path")
 	updateCmd.Flags().StringP("model", "m", "./model/graph.pb", "graph file path")
+	updateCmd.Flags().StringP("checkpoint", "c", "./model/cp.pb", "checkpoint file path")
 	updateCmd.Flags().StringP("out", "o", "./model.go", "output file")
 	updateCmd.Flags().StringSliceP("key", "k", nil, "key string")
 }
