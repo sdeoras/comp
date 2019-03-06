@@ -1,4 +1,4 @@
-package gan
+package ganMnist
 
 //go:generate ./model.sh
 

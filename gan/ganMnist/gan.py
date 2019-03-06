@@ -1,3 +1,13 @@
+# this code has been modified from the original source (see reference to original code below).
+# changes:
+#    * Variables initialize using placeholders
+#    * Weights and biases are saved using proto buf serialization
+#    * A reshape tf-op has been added
+#
+# The main purpose of this code is to obtain a trained model as a checkpoint file along with
+# the graph that can execute the computation. Both graph and checkpoint files are in protobuf
+# format and are imported by the go code.
+
 """ Generative Adversarial Networks (GAN).
 Using generative adversarial networks (GAN) to generate digit images from a
 noise distribution.
@@ -32,7 +42,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Training Params
-num_steps = 10000
+num_steps = 100000
 batch_size = 128
 learning_rate = 0.0002
 

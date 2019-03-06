@@ -1,4 +1,4 @@
-package gan
+package ganMnist
 
 import (
 	"fmt"
