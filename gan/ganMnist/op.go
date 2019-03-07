@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-	"github.com/sdeoras/comp/image"
-	"github.com/sdeoras/comp/common"
+
 	"github.com/sdeoras/api"
+	"github.com/sdeoras/comp/common"
+	"github.com/sdeoras/comp/image"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
