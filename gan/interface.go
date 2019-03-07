@@ -1,10 +1,10 @@
 package gan
 
 import (
-	"github.com/sdeoras/comp/proto"
+	"github.com/sdeoras/api"
 )
 
 type Operator interface {
-	Load(checkpoint *proto.Checkpoint) error
+	Load(checkpoint *api.Checkpoint) error
 	Generate(count int) ([][]byte, error)
 }

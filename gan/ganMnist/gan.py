@@ -7,6 +7,16 @@
 # The main purpose of this code is to obtain a trained model as a checkpoint file along with
 # the graph that can execute the computation. Both graph and checkpoint files are in protobuf
 # format and are imported by the go code.
+#
+# Dependency:
+# you will need to copy python files from github.com/sdeoras/api
+# ========= instructions for python =============
+# "copy python file to virtualenv site package for it to be imported
+# for instance here: ~/.venv/lib/python3.6/site-packages
+# or ~/.conda/envs/comp/lib/python2.7/site-packages
+# where <comp> is the name of conda environment
+# or copy it to the folder where other python file is trying to import it
+# or copy where ever site packages are stored
 
 """ Generative Adversarial Networks (GAN).
 Using generative adversarial networks (GAN) to generate digit images from a

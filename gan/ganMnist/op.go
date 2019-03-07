@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"math/rand"
 	"time"
-
 	"github.com/sdeoras/comp/image"
-
 	"github.com/sdeoras/comp/common"
-	"github.com/sdeoras/comp/proto"
+	"github.com/sdeoras/api"
 	tf "github.com/tensorflow/tensorflow/tensorflow/go"
 )
 
@@ -27,7 +25,7 @@ func NewOperator(options *tf.SessionOptions) (*Op, error) {
 	return op, nil
 }
 
-func (op *Op) Load(checkpoint *proto.Checkpoint) error {
+func (op *Op) Load(checkpoint *api.Checkpoint) error {
 	feeds := make(map[tf.Output]*tf.Tensor)
 	for k, v := range checkpoint.Weights {
 		switch k {
