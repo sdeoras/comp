@@ -9,7 +9,7 @@
 # format and are imported by the go code.
 #
 # Dependency:
-# you will need to copy python files from github.com/sdeoras/api
+# you will need to copy python files from github.com/sdeoras/api/pb
 # ========= instructions for python =============
 # "copy python file to virtualenv site package for it to be imported
 # for instance here: ~/.venv/lib/python3.6/site-packages
