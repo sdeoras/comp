@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/sdeoras/api"
+	"github.com/sdeoras/api/pb"
 )
 
 // TestOp_Load tests loading checkpoint values from cp.pb and initializing
@@ -17,7 +17,7 @@ func TestOp_Load(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cp := new(api.Checkpoint)
+	cp := new(pb.Checkpoint)
 
 	if err := proto.Unmarshal(b, cp); err != nil {
 		t.Fatal(err)
@@ -40,7 +40,7 @@ func TestOp_Generate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	cp := new(api.Checkpoint)
+	cp := new(pb.Checkpoint)
 
 	if err := proto.Unmarshal(b, cp); err != nil {
 		t.Fatal(err)
